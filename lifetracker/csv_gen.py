@@ -11,27 +11,19 @@ def writer(file, data):
 
 def gen_data(data):
     ts = 1492882310
-    rain = False
-    temp = 74
+    future = 875
     for x in range(1000):
-        rand = random.randint(0, 9)
-        if rand == 0:
-            rain = not rain
-        if rand == 1:
-            temp = 75
+        rand = random.randint(0, 250)
         if rand == 2:
-            temp == 75
-        if rain:
-            data.append([temp, "rain", ts-x])
-        else:
-            data.append([temp, "clear", ts-x])
+            future -= 125
+        data.append([future, ts-x])
     return data
 
 
 def main():
     data = []
     data = gen_data(data)
-    writer('data/weather.csv', data)
+    writer('data/billfuture.csv', data)
 
 
 main()

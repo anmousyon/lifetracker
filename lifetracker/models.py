@@ -51,3 +51,19 @@ class Bank(Model):
 class Fit(Model):
     steps = IntegerField()
     time_stamp = IntegerField()
+
+
+class Sleep(Model):
+    status = TextField()
+    hours = IntegerField()
+    time_stamp = IntegerField()
+
+
+class Billdue(Model):
+    amount = IntegerField()
+    time_stamp = IntegerField()
+
+
+class BillFuture(Model):
+    amount = IntegerField()
+    time_stamp = IntegerField()

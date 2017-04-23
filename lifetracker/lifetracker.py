@@ -5,7 +5,7 @@ from peewee import *
 from playhouse.sqlite_ext import SqliteExtDatabase
 import json
 from flask import Flask, render_template, g
-from .models import Lights, Nest, Windows, Water, Electricity, Weather, Car, Bank, Fit
+from .models import Lights, Nest, Windows, Water, Electricity, Weather, Car, Bank, Fit, Sleep, Billdue, BillFuture
 from .home import get_home
 from .car import get_car
 from .life import get_life
@@ -30,7 +30,7 @@ def init_db():
     """Initializes the database."""
     db.connect()
     db.create_tables(
-        [Lights, Nest, Windows, Water, Electricity, Weather, Car, Bank, Fit],
+        [Lights, Nest, Windows, Water, Electricity, Weather, Car, Bank, Fit, Sleep, Billdue, BillFuture],
         safe=True
     )
     get_car()
@@ -106,14 +106,14 @@ def home():
         {
             "Title": "oustide temp",
             "Active": weatherdata.temperature,
-            "Target": "",
-            "Rel": ""
+            "Target": " ",
+            "Rel": " "
         },
         {
             "Title": "outside precip",
             "Active": weatherdata.precipitating,
-            "Target": "",
-            "Rel": ""
+            "Target": " ",
+            "Rel": " "
         },
         {
             "Title": "electricity",
@@ -156,14 +156,14 @@ def car():
         {
             "Title": "speed",
             "Active": cardata.speed,
-            "Target": "",
-            "Rel": ""
+            "Target": " ",
+            "Rel": " "
         },
         {
             "Title": "odometer",
             "Active": cardata.odometer,
-            "Target": "",
-            "Rel": ""
+            "Target": " ",
+            "Rel": " "
         },
         {
             "Title": "fuel_gauge",
@@ -180,14 +180,14 @@ def car():
         {
             "Title": "outside temp",
             "Active": weatherdata.temperature,
-            "Target": "",
-            "Rel": ""
+            "Target": " ",
+            "Rel": " "
         },
         {
             "Title": "outside precip",
             "Active": weatherdata.precipitating,
-            "Target": "",
-            "Rel": ""
+            "Target": " ",
+            "Rel": " "
         },
         {
             "Title": " ",
@@ -206,6 +206,9 @@ def life():
     print("life")
     bankdata = Bank.select().order_by(Bank.time_stamp.desc()).get()
     fitdata = Fit.select().order_by(Fit.time_stamp.desc()).get()
+    sleep = Sleep.select().order_by(Sleep.time_stamp.desc()).get()
+    due = Billdue.select().order_by(Billdue.time_stamp.desc()).get()
+    future = BillFuture.select().order_by(BillFuture.time_stamp.desc()).get()
 
     # make lifedata json object
     data = [
@@ -225,6 +228,24 @@ def life():
             "Title": "savings",
             "Active": bankdata.savings,
             "Target": 1000,
+            "Rel": ">"
+        },
+        {
+            "Title": "sleep",
+            "Active": sleep.hours,
+            "Target": 8,
+            "Rel": ">"
+        },
+        {
+            "Title": "Bills Due",
+            "Active": due.amount,
+            "Target": 0,
+            "Rel": ">"
+        },
+        {
+            "Title": "savings",
+            "Active": future.amount,
+            "Target": 0,
             "Rel": ">"
         },
         {
