@@ -29,7 +29,7 @@ class Electricity(Model):
 
 class Weather(Model):
     temperature = IntegerField()
-    precipitating = BooleanField()
+    precipitating = TextField()
     time_stamp = IntegerField()
 
 

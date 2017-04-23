@@ -3,7 +3,7 @@ import random
 
 
 def writer(file, data):
-    with open(file, 'w', newline='') as f:
+    with open(file, 'w') as f:
         csvwriter = csv.writer(f, delimiter=",")
         for row in data:
             csvwriter.writerow(row)
@@ -11,24 +11,27 @@ def writer(file, data):
 
 def gen_data(data):
     ts = 1492882310
-    savings = 1234
-    spent = 731
+    rain = False
+    temp = 74
     for x in range(1000):
         rand = random.randint(0, 9)
         if rand == 0:
-            spent -= 4
-            savings += 4
-        elif rand == 1:
-            spent -= 3
-            savings += 3
-        data.append([savings, spent, ts-x])
+            rain = not rain
+        if rand == 1:
+            temp = 75
+        if rand == 2:
+            temp == 75
+        if rain:
+            data.append([temp, "rain", ts-x])
+        else:
+            data.append([temp, "clear", ts-x])
     return data
 
 
 def main():
     data = []
     data = gen_data(data)
-    writer('bank.csv', data)
+    writer('data/weather.csv', data)
 
 
 main()
