@@ -49,7 +49,7 @@ def initdb_command():
 def homepage():
     '''homepagepage route'''
     print("/")
-    data = {
+    data = [
         {
             "Title": "Energy",
             "Current": 384
@@ -62,10 +62,9 @@ def homepage():
             "Title": "Fitness",
             "Current": 356
         }
-    }
+    ]
     json_data = json.dumps(data)
-    # return json_data
-    return render_template('index.html')
+    return json_data
 
 
 @lifetracker.route('/home')
@@ -79,7 +78,7 @@ def home():
     elecdata = Electricity.select().order_by(Electricity.time_stamp.desc()).get()
     weatherdata = Weather.select().order_by(Weather.time_stamp.desc()).get()
 
-    data = {
+    data = [
         {
             "Title": "lights",
             "Active": lightdata.active,
@@ -122,7 +121,7 @@ def home():
             "Target": 300,
             "Rel": "<"
         }
-    }
+    ]
     json_data = json.dumps(data)
     return json_data
 
@@ -135,7 +134,7 @@ def car():
     weatherdata = Weather.select().order_by(Weather.time_stamp.desc()).get()
 
     # transform cardata into json object
-    data = {
+    data = [
         {
             "Title": "fuel_consump",
             "Active": cardata.fuel_consump,
@@ -178,7 +177,7 @@ def car():
             "Target": "",
             "Rel": ""
         }
-    }
+    ]
     json_data = json.dumps(data)
     return json_data
 
@@ -191,7 +190,7 @@ def life():
     fitdata = Fit.select().order_by(Fit.time_stamp.desc()).get()
 
     # make lifedata json object
-    data = {
+    data = [
         {
             "Title": "steps",
             "Active": fitdata.steps,
@@ -210,6 +209,6 @@ def life():
             "Target": 1000,
             "Rel": ">"
         }
-    }
+    ]
     json_data = json.dumps(data)
     return json_data
