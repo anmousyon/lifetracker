@@ -86,43 +86,43 @@ def home():
 
     data = [
         {
-            "Title": "lights",
+            "Title": "Lights",
             "Active": lightdata.active,
             "Target": 0,
             "Rel": "<"
         },
         {
-            "Title": "nest",
+            "Title": "Nest",
             "Active": nestdata.inside_temp,
             "Target": nestdata.target_temp,
             "Rel": "="
         },
         {
-            "Title": "windows",
+            "Title": "Windows",
             "Active": windowdata.open,
             "Target": 0,
             "Rel": "<"
         },
         {
-            "Title": "oustide temp",
+            "Title": "Temperature",
             "Active": weatherdata.temperature,
             "Target": " ",
             "Rel": " "
         },
         {
-            "Title": "outside precip",
+            "Title": "Precipitation",
             "Active": weatherdata.precipitating,
             "Target": " ",
             "Rel": " "
         },
         {
-            "Title": "electricity",
+            "Title": "Electricity",
             "Active": elecdata.amount_used,
             "Target": 300,
             "Rel": "<"
         },
         {
-            "Title": "water",
+            "Title": "Water",
             "Active": waterdata.amount_used,
             "Target": 300,
             "Rel": "<"
@@ -148,43 +148,43 @@ def car():
     # transform cardata into json object
     data = [
         {
-            "Title": "fuel_consump",
+            "Title": "Fuel Rate",
             "Active": cardata.fuel_rate,
             "Target": 0.5,
             "Rel": "<"
         },
         {
-            "Title": "speed",
-            "Active": cardata.speed,
+            "Title": "Speed",
+            "Active": int(cardata.speed),
             "Target": " ",
             "Rel": " "
         },
         {
-            "Title": "odometer",
+            "Title": "Odometer",
             "Active": cardata.odometer,
             "Target": " ",
             "Rel": " "
         },
         {
-            "Title": "fuel_gauge",
+            "Title": "Fuel Gauge",
             "Active": cardata.fuel_gauge,
             "Target": 255,
             "Rel": ">"
         },
         {
-            "Title": "ac",
+            "Title": "A/C",
             "Active": cardata.target_temp,
             "Target": 74,
             "Rel": "="
         },
         {
-            "Title": "outside temp",
+            "Title": "Temperature",
             "Active": weatherdata.temperature,
             "Target": " ",
             "Rel": " "
         },
         {
-            "Title": "outside precip",
+            "Title": "Precipitation",
             "Active": weatherdata.precipitating,
             "Target": " ",
             "Rel": " "
@@ -213,25 +213,25 @@ def life():
     # make lifedata json object
     data = [
         {
-            "Title": "steps",
+            "Title": "Steps",
             "Active": fitdata.steps,
             "Target": 10000,
             "Rel": ">"
         },
         {
-            "Title": "spent",
+            "Title": "Spent",
             "Active": bankdata.spent,
             "Target": 0,
             "Rel": "<"
         },
         {
-            "Title": "savings",
+            "Title": "Savings",
             "Active": bankdata.savings,
             "Target": 1000,
             "Rel": ">"
         },
         {
-            "Title": "sleep",
+            "Title": "Sleep",
             "Active": sleep.hours,
             "Target": 8,
             "Rel": ">"
@@ -243,7 +243,7 @@ def life():
             "Rel": ">"
         },
         {
-            "Title": "savings",
+            "Title": "Future Bills",
             "Active": future.amount,
             "Target": 0,
             "Rel": ">"
