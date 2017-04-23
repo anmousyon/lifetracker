@@ -247,13 +247,15 @@ def life():
             "Active": future.amount,
             "Target": 0,
             "Rel": ">"
-        },
+        }
+        ''',
         {
             "Title": " ",
             "Active": " ",
             "Target": " ",
             "Rel": " "
         }
+        '''
     ]
     json_data = json.dumps(data)
     return json_data
