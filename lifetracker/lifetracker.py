@@ -253,12 +253,6 @@ def life():
             "Active": " ",
             "Target": " ",
             "Rel": " "
-        },
-        {
-            "Title": " ",
-            "Active": " ",
-            "Target": " ",
-            "Rel": " "
         }
     ]
     json_data = json.dumps(data)
