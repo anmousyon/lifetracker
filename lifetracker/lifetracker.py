@@ -74,7 +74,7 @@ def home():
     lightdata = Lights.select().order_by(Lights.time_stamp.desc()).get()
     windowdata = Windows.select().order_by(Windows.time_stamp.desc()).get()
     nestdata = Nest.select().order_by(Nest.time_stamp.desc()).get()
-    waterdata = Water.select().order_by(Lights.time_stamp.desc()).get()
+    waterdata = Water.select().order_by(Water.time_stamp.desc()).get()
     elecdata = Electricity.select().order_by(Electricity.time_stamp.desc()).get()
     weatherdata = Weather.select().order_by(Weather.time_stamp.desc()).get()
 
