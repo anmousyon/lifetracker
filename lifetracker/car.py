@@ -1,44 +1,31 @@
-# read in telemmetry data
-# parse it
-# put in database with timestamps
-
 import csv
+from .models import Car
 
 
-def read_telem(file):
+def read_csv(file):
     '''reads telem data from csv into list of lists'''
-    telemdata = []
+    data = []
     with open(file) as f:
-        telemdata = csv.reader(f, delimiter=",")
-    return telemdata
+        datareader = csv.reader(f, delimiter=",")
+        for row in datareader:
+            data.append(row)
+    return data
 
 
-def combine(data):
-    '''combines telem data by timestamp'''
-    # split data into list of lists of lists by timestamp
-    combined = []
-    ts_to_data = {}
-    for ts in data:
-        # create a group of similar timestamps
-        ts_to_data[ts[0]].append(ts)
-    for _, v in ts_to_data:
-        combined.append(v)
-
-def smooth(data):
-    '''smooth out the data '''
-    for ts in data:
-        # combine lists by getting median of each continous data point
-        # take newest value for any booleans
-
-
-def insert(data, db):
+def insert(dataset):
     ''' insert data into database '''
-    for ts in data:
-        # insert data into database
+    for data in dataset:
+        row = Car.create(
+            time_stamp=data[0],
+            fuel_rate=data[1],
+            speed=data[2],
+            odometer=data[3],
+            target_temp=data[4],
+            fuel_gauge=data[5]
+        )
+        row.save()
 
 
-def get_cardata(db):
-    data = read_telem('telem.csv')
-    data = combine(data)
-    data = smooth(data)
-    insert(data, db)
+def get_car():
+    data = read_csv('lifetracker/data/car2.csv')
+    insert(data)

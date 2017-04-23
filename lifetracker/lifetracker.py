@@ -1,14 +1,20 @@
 ''' main lifetracker server '''
 
 import os
-import sqlite3
+from peewee import *
+from playhouse.sqlite_ext import SqliteExtDatabase
+import json
 from flask import Flask, render_template, g
+from .models import Lights, Nest, Windows, Water, Electricity, Weather, Car, Bank, Fit
+from .home import get_home
+from .car import get_car
+from .life import get_life
 
 app = Flask(__name__)
 
 # Load default config and override config from an environment variable
 app.config.update(dict(
-    DATABASE=os.path.join(app.root_path, 'lifetracker.db'),
+    DATABASE=os.path.join(app.root_path, 'lifetracker/lifetracker.db'),
     DEBUG=True,
     SECRET_KEY='development key',
     USERNAME='admin',
@@ -17,82 +23,188 @@ app.config.update(dict(
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 
-def connect_db():
-    """Connects to the specific database."""
-    rv = sqlite3.connect(app.config['DATABASE'])
-    rv.row_factory = sqlite3.Row
-    return rv
+db = SqliteExtDatabase('lifetracker/lifetracker.db')
 
 
 def init_db():
     """Initializes the database."""
-    db = get_db()
-    with app.open_resource('schema.sql', mode='r') as f:
-        db.cursor().executescript(f.read())
-    db.commit()
+    db.connect()
+    db.create_tables(
+        [Lights, Nest, Windows, Water, Electricity, Weather, Car, Bank, Fit],
+        safe=True
+    )
+    get_car()
+    get_home()
+    get_life()
 
 
 @app.cli.command('initdb')
 def initdb_command():
-    """Creates the database tables."""
+    """Creates and fills the database tables."""
     init_db()
     print('Initialized the database.')
-
-
-def get_db():
-    """Opens a new database connection if there is none yet for the
-    current application context.
-    """
-    if not hasattr(g, 'sqlite_db'):
-        g.sqlite_db = connect_db()
-    return g.sqlite_db
-
-
-@app.teardown_appcontext
-def close_db(error):
-    """Closes the database again at the end of the request."""
-    if hasattr(g, 'sqlite_db'):
-        g.sqlite_db.close()
 
 
 @app.route('/')
 def main():
     '''main page route'''
-    db = get_db()
-    cur = db.execute('select title, text from entries order by id desc')
-    entries = cur.fetchall()
-    return render_template('show_entries.html', entries=entries)
+    data = {
+        {
+            "Title": "Energy",
+            "Current": 384
+        },
+        {
+            "Title": "Money",
+            "Current": 153
+        },
+        {
+            "Title": "Fitness",
+            "Current": 356
+        }
+    }
+    json_data = json.dumps(data)
+    return json_data
 
 
 @app.route('/')
 def home():
     '''home route'''
-    db = get_db()
-    cur = db.execute('select * from nest')
-    nestdata = cur.fetchall()
-    cur = db.execute('select * from water')
-    waterdata = cur.fetchall()
-    cur = db.execute('select * from electricity')
-    elecdata = cur.fetchall()
-    cur = db.execute('select * from weather')
-    weatherdata = cur.fetchall()
+    lightdata = Lights.select().order_by(Lights.time_stamp.desc()).get()
+    windowdata = Windows.select().order_by(Windows.time_stamp.desc()).get()
+    nestdata = Nest.select().order_by(Nest.time_stamp.desc()).get()
+    waterdata = Water.select().order_by(Lights.time_stamp.desc()).get()
+    elecdata = Electricity.select().order_by(Electricity.time_stamp.desc()).get()
+    weatherdata = Weather.select().order_by(Weather.time_stamp.desc()).get()
 
-    return render_template('show_entries.html', homedata=homedata)
+    data = {
+        {
+            "Title": "lights",
+            "Active": lightdata.active,
+            "Target": 0,
+            "Rel": "<"
+        },
+        {
+            "Title": "nest",
+            "Active": nestdata.inside_temp,
+            "Target": nestdata.target_temp,
+            "Rel": "="
+        },
+        {
+            "Title": "windows",
+            "Active": windowdata.open,
+            "Target": 0,
+            "Rel": "<"
+        },
+        {
+            "Title": "oustide temp",
+            "Active": weatherdata.temperature,
+            "Target": "",
+            "Rel": ""
+        },
+        {
+            "Title": "outside precip",
+            "Active": weatherdata.precipitating,
+            "Target": "",
+            "Rel": ""
+        },
+        {
+            "Title": "electricity",
+            "Active": elecdata.amount_used,
+            "Target": 300,
+            "Rel": "<"
+        },
+        {
+            "Title": "water",
+            "Active": waterdata.amount_used,
+            "Target": 300,
+            "Rel": "<"
+        }
+    }
+    json_data = json.dumps(data)
+    return json_data
 
 
 @app.route('/')
 def car():
     '''care route'''
-    db = get_db()
-    cur = db.execute('select * from car')
-    cardata = cur.fetchall()
-    return render_template('show_entries.html', cardata=cardata)
+    cardata = Car.select().order_by(Car.time_stamp.desc()).get()
+    weatherdata = Weather.select().order_by(Weather.time_stamp.desc()).get()
+
+    # transform cardata into json object
+    data = {
+        {
+            "Title": "fuel_consump",
+            "Active": cardata.fuel_consump,
+            "Target": 0.5,
+            "Rel": "<"
+        },
+        {
+            "Title": "speed",
+            "Active": cardata.speed,
+            "Target": "",
+            "Rel": ""
+        },
+        {
+            "Title": "odometer",
+            "Active": cardata.odometer,
+            "Target": "",
+            "Rel": ""
+        },
+        {
+            "Title": "fuel_gauge",
+            "Active": cardata.fuel_gauge,
+            "Target": 255,
+            "Rel": ">"
+        },
+        {
+            "Title": "ac",
+            "Active": cardata.target_temp,
+            "Target": 74,
+            "Rel": "="
+        },
+        {
+            "Title": "outside temp",
+            "Active": weatherdata.temperature,
+            "Target": "",
+            "Rel": ""
+        },
+        {
+            "Title": "outside precip",
+            "Active": weatherdata.precipitating,
+            "Target": "",
+            "Rel": ""
+        }
+    }
+    json_data = json.dumps(data)
+    return json_data
 
 
 @app.route('/')
 def life():
     '''life route'''
-    db = get_db()
-    cur = db.execute('select * from life')
-    lifedata = cur.fetchall()
-    return render_template('life.html', lifedata=lifedata)
+    bankdata = Bank.select().order_by(Bank.time_stamp.desc()).get()
+    fitdata = Fit.select().order_by(Fit.time_stamp.desc()).get()
+
+    # make lifedata json object
+    data = {
+        {
+            "Title": "steps",
+            "Active": fitdata.steps,
+            "Target": 10000,
+            "Rel": ">"
+        },
+        {
+            "Title": "spent",
+            "Active": bankdata.spent,
+            "Target": 0,
+            "Rel": "<"
+        },
+        {
+            "Title": "savings",
+            "Active": bankdata.savings,
+            "Target": 1000,
+            "Rel": ">"
+        }
+    }
+    json_data = json.dumps(data)
+    return json_data

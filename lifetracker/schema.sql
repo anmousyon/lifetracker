@@ -1,6 +1,16 @@
+create table if not exists lights (
+    active integer
+    time_stamp integer
+)
+
 create table if not exists nest (
     target_temp integer
     inside_temp integer
+    time_stamp integer
+)
+
+create table if not exists windows (
+    open integer
     time_stamp integer
 )
 
@@ -21,19 +31,21 @@ create table if not exists weather (
 )
 
 create table if not exists car (
-    distance integer
+    speed integer
+    odometer integer
     fuel_gauge integer
-    temperature integer
+    target_temp integer
     windows_open integer
     time_stamp integer
 )
 
-create table if not exists transamerica (
+create table if not exists bank (
     savings integer
+    spent integer
     time_stamp integer
 )
 
-create table if not exists google_fit (
+create table if not exists fit (
     steps integer
     time_stamp integer
 )
