@@ -222,7 +222,7 @@ def life():
             "Title": "Spent",
             "Active": bankdata.spent,
             "Target": 0,
-            "Rel": "<"
+            "Rel": "="
         },
         {
             "Title": "Savings",
@@ -240,13 +240,19 @@ def life():
             "Title": "Bills Due",
             "Active": due.amount,
             "Target": 0,
-            "Rel": ">"
+            "Rel": "="
         },
         {
             "Title": "Future Bills",
             "Active": future.amount,
             "Target": 0,
-            "Rel": ">"
+            "Rel": "="
+        },
+        {
+            "Title": " ",
+            "Active": " ",
+            "Target": " ",
+            "Rel": " "
         }
     ]
     json_data = json.dumps(data)
