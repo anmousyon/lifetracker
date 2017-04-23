@@ -48,6 +48,7 @@ def initdb_command():
 @app.route('/')
 def homepage():
     '''homepagepage route'''
+    print("/")
     data = {
         {
             "Title": "Energy",
@@ -66,9 +67,10 @@ def homepage():
     return json_data
 
 
-@app.route('/')
+@app.route('/home')
 def home():
     '''home route'''
+    print("/home")
     lightdata = Lights.select().order_by(Lights.time_stamp.desc()).get()
     windowdata = Windows.select().order_by(Windows.time_stamp.desc()).get()
     nestdata = Nest.select().order_by(Nest.time_stamp.desc()).get()
@@ -124,9 +126,10 @@ def home():
     return json_data
 
 
-@app.route('/')
+@app.route('/car')
 def car():
-    '''care route'''
+    '''car route'''
+    print("car")
     cardata = Car.select().order_by(Car.time_stamp.desc()).get()
     weatherdata = Weather.select().order_by(Weather.time_stamp.desc()).get()
 
@@ -179,9 +182,10 @@ def car():
     return json_data
 
 
-@app.route('/')
+@app.route('/life')
 def life():
     '''life route'''
+    print("life")
     bankdata = Bank.select().order_by(Bank.time_stamp.desc()).get()
     fitdata = Fit.select().order_by(Fit.time_stamp.desc()).get()
 
