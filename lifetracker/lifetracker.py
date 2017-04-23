@@ -10,17 +10,17 @@ from .home import get_home
 from .car import get_car
 from .life import get_life
 
-app = Flask(__name__)
+lifetracker = Flask(__name__)
 
 # Load default config and override config from an environment variable
-app.config.update(dict(
-    DATABASE=os.path.join(app.root_path, 'lifetracker/lifetracker.db'),
+lifetracker.config.update(dict(
+    DATABASE=os.path.join(lifetracker.root_path, 'lifetracker/lifetracker.db'),
     DEBUG=True,
     SECRET_KEY='development key',
     USERNAME='admin',
     PASSWORD='default'
 ))
-app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+lifetracker.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 
 db = SqliteExtDatabase('lifetracker/lifetracker.db')
@@ -38,14 +38,14 @@ def init_db():
     get_life()
 
 
-@app.cli.command('initdb')
+@lifetracker.cli.command('initdb')
 def initdb_command():
     """Creates and fills the database tables."""
     init_db()
     print('Initialized the database.')
 
 
-@app.route('/')
+@lifetracker.route('/')
 def homepage():
     '''homepagepage route'''
     print("/")
@@ -64,10 +64,11 @@ def homepage():
         }
     }
     json_data = json.dumps(data)
-    return json_data
+    # return json_data
+    return render_template('index.html')
 
 
-@app.route('/home')
+@lifetracker.route('/home')
 def home():
     '''home route'''
     print("/home")
@@ -126,7 +127,7 @@ def home():
     return json_data
 
 
-@app.route('/car')
+@lifetracker.route('/car')
 def car():
     '''car route'''
     print("car")
@@ -182,7 +183,7 @@ def car():
     return json_data
 
 
-@app.route('/life')
+@lifetracker.route('/life')
 def life():
     '''life route'''
     print("life")

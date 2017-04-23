@@ -1,3 +1,3 @@
 ''' lifetracker app '''
 
-from .lifetracker import app
+from .lifetracker import lifetracker
