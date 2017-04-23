@@ -61,6 +61,12 @@ def homepage():
         {
             "Title": "Fitness",
             "Current": 356
+        },
+        {
+            "Title": " ",
+            "Active": " ",
+            "Target": " ",
+            "Rel": " "
         }
     ]
     json_data = json.dumps(data)
@@ -120,6 +126,12 @@ def home():
             "Active": waterdata.amount_used,
             "Target": 300,
             "Rel": "<"
+        },
+        {
+            "Title": " ",
+            "Active": " ",
+            "Target": " ",
+            "Rel": " "
         }
     ]
     json_data = json.dumps(data)
@@ -176,6 +188,12 @@ def car():
             "Active": weatherdata.precipitating,
             "Target": "",
             "Rel": ""
+        },
+        {
+            "Title": " ",
+            "Active": " ",
+            "Target": " ",
+            "Rel": " "
         }
     ]
     json_data = json.dumps(data)
@@ -208,6 +226,12 @@ def life():
             "Active": bankdata.savings,
             "Target": 1000,
             "Rel": ">"
+        },
+        {
+            "Title": " ",
+            "Active": " ",
+            "Target": " ",
+            "Rel": " "
         }
     ]
     json_data = json.dumps(data)
