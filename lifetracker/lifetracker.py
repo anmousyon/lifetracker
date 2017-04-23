@@ -137,7 +137,7 @@ def car():
     data = [
         {
             "Title": "fuel_consump",
-            "Active": cardata.fuel_consump,
+            "Active": cardata.fuel_rate,
             "Target": 0.5,
             "Rel": "<"
         },
