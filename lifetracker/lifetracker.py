@@ -46,8 +46,8 @@ def initdb_command():
 
 
 @app.route('/')
-def main():
-    '''main page route'''
+def homepage():
+    '''homepagepage route'''
     data = {
         {
             "Title": "Energy",
